@@ -30,4 +30,12 @@ public class Usuario {
 
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean activo = true;
+
+    public Usuario(String nombre, String apellido, String email, String password, Role role) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.password = password;
+        this.rol = role;
+    }
 }
