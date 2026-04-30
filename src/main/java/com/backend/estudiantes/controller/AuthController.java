@@ -1,7 +1,6 @@
 package com.backend.estudiantes.controller;
 
 import com.backend.estudiantes.dto.LoginRequest;
-import com.backend.estudiantes.model.Usuario;
 import com.backend.estudiantes.service.AuthServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +20,15 @@ public class AuthController {
     private AuthServices authServices;
 
     @PostMapping("login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request){
-        try{
-            Usuario usuario = authServices.authenticate(request.getEmail(), request.getPassword());
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+        try {
+            String token = authServices.authenticate(request.getEmail(), request.getPassword());
             return ResponseEntity.ok(Map.of(
-                    "message", "Login exitoso!",
-                    "email", usuario.getEmail(),
-                    "rol", usuario.getRol().name()
+                    "email", request.getEmail(),
+                    "token", token
             ));
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body(Map.of(
-                    "error", e.getMessage()
-                    )
-            );
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 }

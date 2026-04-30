@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class AuthServices {
 
@@ -15,16 +17,17 @@ public class AuthServices {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Usuario authenticate(String email, String password){
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(
-                        () -> new RuntimeException("Usuario no encontrado")
-                );
+    @Autowired
+    private JwtService jwtService;
 
-        if(!passwordEncoder.matches(password, usuario.getPassword())){
+    public String authenticate(String email, String password) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (!passwordEncoder.matches(password, usuario.getPassword())) {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
-        return usuario;
+        return jwtService.generateToken(Map.of("rol", usuario.getRol()), usuario);
     }
 }
