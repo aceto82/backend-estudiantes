@@ -23,7 +23,7 @@ public class AuthController {
         try {
             var tokens = authServices.authenticate(request.getEmail(), request.getPassword());
             return ResponseEntity.ok(AuthResponseBuilder.buildLoginSuccess(
-                    request.getEmail(), tokens.getAccessToken(), tokens.getRefreshToken()));
+                    tokens.getUsuario(), tokens.getAccessToken(), tokens.getRefreshToken(), tokens.getExpiresIn()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(AuthResponseBuilder.buildError(e.getMessage()));
         }
