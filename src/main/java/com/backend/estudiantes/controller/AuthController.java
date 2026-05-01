@@ -21,8 +21,9 @@ public class AuthController {
     @PostMapping("login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         try {
-            String token = authServices.authenticate(request.getEmail(), request.getPassword());
-            return ResponseEntity.ok(AuthResponseBuilder.buildLoginSuccess(request.getEmail(), token));
+            var tokens = authServices.authenticate(request.getEmail(), request.getPassword());
+            return ResponseEntity.ok(AuthResponseBuilder.buildLoginSuccess(
+                    request.getEmail(), tokens.getAccessToken(), tokens.getRefreshToken()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(AuthResponseBuilder.buildError(e.getMessage()));
         }

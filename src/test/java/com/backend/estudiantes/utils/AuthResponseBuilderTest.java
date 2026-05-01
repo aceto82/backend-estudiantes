@@ -9,12 +9,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AuthResponseBuilderTest {
 
     @Test
-    void buildLoginSuccess_contieneEmailYToken() {
-        Map<String, Object> response = AuthResponseBuilder.buildLoginSuccess("user@example.com", "eyJ.token");
+    void buildLoginSuccess_contieneEmailAccessTokenYRefreshToken() {
+        Map<String, Object> response = AuthResponseBuilder.buildLoginSuccess(
+                "user@example.com", "eyJ.access", "uuid-refresh");
 
         assertEquals("user@example.com", response.get("email"));
-        assertEquals("eyJ.token", response.get("token"));
-        assertEquals(2, response.size());
+        assertEquals("eyJ.access", response.get("accessToken"));
+        assertEquals("uuid-refresh", response.get("refreshToken"));
+        assertEquals(3, response.size());
     }
 
     @Test

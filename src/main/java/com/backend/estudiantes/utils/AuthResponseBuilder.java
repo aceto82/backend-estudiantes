@@ -6,8 +6,8 @@ public class AuthResponseBuilder {
 
     private AuthResponseBuilder() {}
 
-    public static Map<String, Object> buildLoginSuccess(String email, String token) {
-        return Map.of("email", email, "token", token);
+    public static Map<String, Object> buildLoginSuccess(String email, String accessToken, String refreshToken) {
+        return Map.of("email", email, "accessToken", accessToken, "refreshToken", refreshToken);
     }
 
     public static Map<String, Object> buildError(String message) {
