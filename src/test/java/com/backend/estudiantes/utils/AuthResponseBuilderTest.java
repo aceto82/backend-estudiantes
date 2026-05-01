@@ -66,6 +66,19 @@ public class AuthResponseBuilderTest {
     }
 
     @Test
+    void buildRefreshSuccess_contieneCuatroClavesSinUsuario() {
+        Map<String, Object> response = AuthResponseBuilder.buildRefreshSuccess(
+                "eyJ.access", "uuid-refresh", 3600L);
+
+        assertEquals(4, response.size());
+        assertEquals("eyJ.access", response.get("accessToken"));
+        assertEquals("uuid-refresh", response.get("refreshToken"));
+        assertEquals("Bearer", response.get("tokenType"));
+        assertEquals(3600L, response.get("expiresIn"));
+        assertFalse(response.containsKey("usuario"));
+    }
+
+    @Test
     void buildError_contieneError() {
         Map<String, Object> response = AuthResponseBuilder.buildError("Contraseña incorrecta");
 

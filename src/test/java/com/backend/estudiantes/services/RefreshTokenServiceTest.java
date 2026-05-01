@@ -157,6 +157,37 @@ class RefreshTokenServiceTest {
         verify(refreshTokenRepository, never()).save(any());
     }
 
+    // --- rotar(RefreshToken) ---
+
+    @Test
+    void cuandoEntidadValida_revocaViejoYDevuelveNuevoToken() {
+        Usuario usuario = buildUsuario();
+        RefreshToken tokenViejo = buildToken(usuario, false, Instant.now().plusSeconds(3600));
+        when(refreshTokenRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+        RefreshToken tokenNuevo = refreshTokenService.rotar(tokenViejo);
+
+        ArgumentCaptor<RefreshToken> captor = ArgumentCaptor.forClass(RefreshToken.class);
+        verify(refreshTokenRepository, times(2)).save(captor.capture());
+
+        assertTrue(captor.getAllValues().get(0).isRevoked());
+        assertNotEquals("uuid-token", tokenNuevo.getToken());
+        assertFalse(tokenNuevo.isRevoked());
+    }
+
+    @Test
+    void cuandoStringValido_delegaEnRotarYDevuelveNuevoToken() {
+        Usuario usuario = buildUsuario();
+        RefreshToken tokenViejo = buildToken(usuario, false, Instant.now().plusSeconds(3600));
+        when(refreshTokenRepository.findByToken("token-str")).thenReturn(Optional.of(tokenViejo));
+        when(refreshTokenRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+        RefreshToken tokenNuevo = refreshTokenService.rotarToken("token-str");
+
+        assertNotEquals("uuid-token", tokenNuevo.getToken());
+        assertFalse(tokenNuevo.isRevoked());
+    }
+
     // --- limpiarTokensExpirados ---
 
     @Test

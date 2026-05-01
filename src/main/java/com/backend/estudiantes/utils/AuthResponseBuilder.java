@@ -28,6 +28,16 @@ public class AuthResponseBuilder {
         );
     }
 
+    public static Map<String, Object> buildRefreshSuccess(
+            String accessToken, String refreshToken, long expiresIn) {
+        return Map.of(
+                "accessToken", accessToken,
+                "refreshToken", refreshToken,
+                "tokenType", TOKEN_TYPE,
+                "expiresIn", expiresIn
+        );
+    }
+
     public static Map<String, Object> buildError(String message) {
         return Map.of("error", message);
     }

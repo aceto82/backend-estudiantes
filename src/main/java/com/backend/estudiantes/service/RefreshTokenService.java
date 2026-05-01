@@ -48,11 +48,14 @@ public class RefreshTokenService {
         refreshTokenRepository.deleteByUsuario(usuario);
     }
 
+    public RefreshToken rotar(RefreshToken tokenViejo) {
+        tokenViejo.setRevoked(true);
+        refreshTokenRepository.save(tokenViejo);
+        return crear(tokenViejo.getUsuario());
+    }
+
     public RefreshToken rotarToken(String tokenViejo) {
-        RefreshToken tokenActual = buscarPorToken(tokenViejo);
-        tokenActual.setRevoked(true);
-        refreshTokenRepository.save(tokenActual);
-        return crear(tokenActual.getUsuario());
+        return rotar(buscarPorToken(tokenViejo));
     }
 
     public void limpiarTokensExpirados() {
