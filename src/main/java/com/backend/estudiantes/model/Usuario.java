@@ -53,7 +53,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return email;
     }
 
     @Override
