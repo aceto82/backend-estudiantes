@@ -22,6 +22,7 @@ The app will not start without these set:
 | `DB_PASS` | Database password |
 | `JWT_SECRET` | Base64-encoded HMAC signing key |
 | `JWT_EXPIRATION` | Token TTL in milliseconds |
+| `CORS_ALLOWED_ORIGIN` | Frontend origin allowed by CORS (default: `http://localhost:4200`) |
 
 ## Architecture
 
